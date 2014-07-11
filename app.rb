@@ -22,9 +22,10 @@ get '/level' do
   content_type :json
   {:level => {:timestamp => timestamp, :level => level.to_f, :average => average.to_f}}.to_json
 
-
 end
 
 get '/' do
+
     "This is a simple api exposing scraped SAWS data.<br />Data endpoint: <a href='/level'>/level</a>"
+    
 end
