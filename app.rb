@@ -15,14 +15,21 @@ get '/level' do
   level_data = level_scrape.xpath('//td/text()').to_a
   level = level_data[2].to_s
 
-  # Grab the timestamp for the current level
+  # Grab the timestamp for when the current level was last updated
   datetime_data = "#{level_data[0]} #{level_data[1]}"
   datetime = Time.parse(datetime_data)
-  timestamp = datetime.strftime("%FT%T%:z")
+  lastUpdated = datetime.strftime("%FT%T%:z")
 
   # Return json
   content_type :json
-  {:level => {:timestamp => timestamp, :level => level.to_f, :average => average.to_f}}.to_json
+
+  {
+    :level => {
+      :recent => level.to_f, 
+      :average => average.to_f, 
+      :lastUpdated => lastUpdated,
+    }
+  }.to_json
 
 end
 
