@@ -20,16 +20,23 @@ get '/level' do
   datetime = Time.parse(datetime_data)
   lastUpdated = datetime.strftime("%FT%T%:z")
 
+  # Get the current stage level from SAWS
+  stage_scrape = Nokogiri::HTML(open('http://www.saws.org/'))
+  stage_data = stage_scrape.css('#aquifer_tab').text.split.to_a
+  stageLevel = stage_data[5].gsub(/[:]/, '').to_f
+
+  # Create the response
+  response = { :level => { :recent => level.to_f, :average => average.to_f, :lastUpdated => lastUpdated, }, :stageLevel => stageLevel }.to_json
+  response_json = JSON.parse(response)
+
+  # If we're local, puts to command line so we can just see the response
+  if self.class.development?
+    puts JSON.pretty_generate(response_json)
+  end
+
   # Return json
   content_type :json
-
-  {
-    :level => {
-      :recent => level.to_f, 
-      :average => average.to_f, 
-      :lastUpdated => lastUpdated,
-    }
-  }.to_json
+  JSON.pretty_generate(response_json)
 
 end
 
