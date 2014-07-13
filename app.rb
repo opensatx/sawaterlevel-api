@@ -42,14 +42,6 @@ end
 
 get '/' do
 
-    "<h2>This is a simple API that scrapes level data San Antonio's Edwards Aquifer Authority.</h2>
-    Data endpoint: <a href='/level'>/level</a>
-    <br />
-    <br />timestamp is the time the <a href='http://www.edwardsaquifer.org/data/j17_live.php'>most current level was updated</a> (every 15 minutes)
-    <br />level is the current <a href='http://www.edwardsaquifer.org/aquifer-data-and-maps/j17-data'>J17 aquifer level</a>
-    <br />average is the <a href='http://www.edwardsaquifer.org/aquifer-data-and-maps/historical-data'>J17 aquifer 10-day average level</a>
-    <br />
-    <br />Fork me on Github: <a href='https://github.com/opensatx/sawaterlevel-api'>opensatx/sawaterlevel-api</a>
-    <br />Data scraped from: <a href=''>Edwards Aquifer Authority</a> (thanks!)"
+    erb :index
     
 end
