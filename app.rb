@@ -23,10 +23,10 @@ get '/level' do
   # Get the current stage level from SAWS
   stage_scrape = Nokogiri::HTML(open('http://www.saws.org/'))
   stage_data = stage_scrape.css('#aquifer_tab').text.split.to_a
-  stageLevel = stage_data[5].gsub(/[:]/, '').to_f
+  stageLevel = stage_data[5].gsub(/[:]/, '').to_i
 
   # Create the response
-  response = { :level => { :recent => level.to_f, :average => average.to_f, :lastUpdated => lastUpdated, }, :stageLevel => stageLevel }.to_json
+  response = { :level => { :recent => level.to_f.round(2), :average => average.to_f.round(2), :lastUpdated => lastUpdated, }, :stageLevel => stageLevel }.to_json
   response_json = JSON.parse(response)
 
   # If we're local, puts to command line so we can just see the response
