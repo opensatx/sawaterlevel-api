@@ -34,7 +34,7 @@ get '/level' do
   if stageLevel.eql?(3) || stageLevel > 3
     irrigationAllowed = "undefined"
   else
-    irrigationAllowed = "true"
+    irrigationAllowed = true
   end
 
   # Create the response
