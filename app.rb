@@ -30,8 +30,15 @@ get '/level' do
   stage_data = stage_scrape.css('#aquifer_tab').text.split.to_a
   stageLevel = stage_data[5].gsub(/[:]/, '').to_i
 
+  # Let's build a sample irrigation level
+  if stageLevel.eql?(3) || stageLevel > 3
+    irrigationAllowed = "undefined"
+  else
+    irrigationAllowed = "true"
+  end
+
   # Create the response
-  response = { :level => { :recent => level.to_f.round(2), :average => average.to_f.round(2), :lastUpdated => lastUpdated, }, :stageLevel => stageLevel }.to_json
+  response = { :level => { :recent => level.to_f.round(2), :average => average.to_f.round(2), :lastUpdated => lastUpdated, }, :stageLevel => stageLevel, :irrigationAllowed => irrigationAllowed }.to_json
   response_json = JSON.parse(response)
 
   # If we're local, puts to command line so we can just see the response
