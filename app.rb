@@ -31,7 +31,7 @@ get '/level' do
   stageLevel = stage_data[5].gsub(/[:]/, '').to_i
 
   # Let's build a sample irrigation level
-  if stageLevel.eql?(3)
+  if stageLevel.eql?(3) || stageLevel > 3
     irrigationAllowed = "undefined"
   else
     irrigationAllowed = "true"
