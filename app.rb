@@ -6,9 +6,14 @@ require 'json'
 get '/level' do
 
   # Get the 10-day average
-  average_scrape = Nokogiri::HTML(open('http://www.edwardsaquifer.org/data/historic.php')) # Get the data
-  average_data = average_scrape.xpath('//td/text()').to_a  # Just grab the numbers
-  average = average_data[4].to_s # Take the 10-day average, make it a string
+  # average_scrape = Nokogiri::HTML(open('http://www.edwardsaquifer.org/data/historic.php')) # Get the data
+  # average_data = average_scrape.xpath('//td/text()').to_a  # Just grab the numbers
+  # average = average_data[4].to_s # Take the 10-day average, make it a string
+
+  average_scrape = Nokogiri::HTML(open('http://www.edwardsaquifer.org/'))
+  average_data = average_scrape.xpath('//td/text()').to_a
+  average_with_char = average_data[7].to_s.delete('*')
+  average = average_with_char.to_f
 
   # Get the current level
   level_scrape = Nokogiri::HTML(open('http://www.edwardsaquifer.org/data/j17_live.php')) # Get the data
