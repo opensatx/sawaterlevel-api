@@ -12,7 +12,6 @@ get '/level' do
   # average_data = average_scrape.xpath('//td/text()').to_a  # Just grab the numbers
   # average = average_data[4].to_s # Take the 10-day average, make it a string
 
-
   if self.class.development?
     dalli = Dalli::Client.new('localhost:11211', { :namespace => "sawaterlevel",
       :compress => true,  :expires_in => 10 * 60})
@@ -29,7 +28,7 @@ get '/level' do
   response = dalli.get('tenday')
 
   unless response
-    average_scrape = Nokogiri::HTML(open('http://www.edwardsaquifer.org/'))
+    average_scrape = Nokogiri::HTML(HTTParty.get('http://www.edwardsaquifer.org/'))
     average_data = average_scrape.xpath('//td/text()').to_a
     average_with_char = average_data[7].to_s.delete('*')
     average = average_with_char.to_f
