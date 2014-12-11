@@ -3,6 +3,7 @@ require 'nokogiri'
 require 'open-uri'
 require 'json'
 require 'dalli'
+require 'httparty'
 
 
 get '/level' do
