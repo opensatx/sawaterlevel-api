@@ -3,10 +3,18 @@ require 'nokogiri'
 require 'open-uri'
 require 'json'
 require 'dalli'
+require 'memcachier'
 require 'httparty'
+require 'sqlite3'
 
 
 get '/level' do
+
+  # Set up the local db connection
+  db = SQLite3::Database.new('db.sqlite3')
+
+  # Create the table if needed
+  db.execute("CREATE TABLE IF NOT EXISTS Responses (ID INTEGER PRIMARY KEY, RecentLevel REAL, AverageLevel REAL, LastUpdated TEXT, StageLevel INTEGER, IrrigationAllowed NUMERIC)")
 
   # Get the 10-day average
   # average_scrape = Nokogiri::HTML(open('http://www.edwardsaquifer.org/data/historic.php')) # Get the data
@@ -68,6 +76,17 @@ get '/level' do
   if self.class.development?
     puts JSON.pretty_generate(response_json)
   end
+
+  # Store response in DB if we don't already have it
+  unless db.execute("SELECT ID FROM Responses WHERE LastUpdated = ?", response_json["level"]["lastUpdated"]).length > 0
+    db.execute("INSERT INTO Responses (RecentLevel, AverageLevel, LastUpdated, StageLevel, IrrigationAllowed) VALUES (?, ?, ?, ?, ?)", 
+      response_json["level"]["recent"], 
+      response_json["level"]["average"], 
+      response_json["level"]["lastUpdated"], 
+      response_json["stageLevel"], 
+      response_json["irrigationAllowed"].to_s
+    )	  
+  end	
 
   # Return json
   content_type :json
